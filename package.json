@@ -1,0 +1,26 @@
+{
+  "name": "golden-raspberry-api",
+  "version": "1.0.0",
+  "description": "API RESTful para análise dos prêmios Golden Raspberry (Pior Filme)",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest"
+  },
+  "keywords": [],
+  "author": "Alex",
+  "license": "MIT",
+  "dependencies": {
+    "csv-parser": "^3.2.0",
+    "express": "^4.19.2",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "jest": "^30.0.0",
+    "nodemon": "^3.0.3",
+    "supertest": "^7.1.1"
+  }
+}
