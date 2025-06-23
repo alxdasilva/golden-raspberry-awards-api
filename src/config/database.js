@@ -1,12 +1,12 @@
-import sqlite3 from "sqlite3";
-import { open } from "sqlite";
+import sqlite3 from 'sqlite3';
+import { open } from 'sqlite';
 
 let db;
 
 export async function initializeDatabase() {
   db = await open({
-    filename: ":memory:",
-    driver: sqlite3.Database,
+    filename: ':memory:',
+    driver: sqlite3.Database
   });
 
   await db.exec(`
@@ -19,6 +19,14 @@ export async function initializeDatabase() {
       winner BOOLEAN
     );
   `);
+
+  return db;
 }
 
-export { db };
+export function getDb() {
+  return db;
+}
+
+export function setDb(instance) {
+  db = instance;
+}

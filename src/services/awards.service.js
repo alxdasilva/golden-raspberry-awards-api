@@ -1,4 +1,4 @@
-import { db } from "../config/database.js";
+import { getDb } from '../config/database.js';
 
 function getProducersList(producersField) {
   return producersField
@@ -8,6 +8,7 @@ function getProducersList(producersField) {
 }
 
 export async function calculateAwardIntervals() {
+  const db = getDb();
   const rows = await db.all(`
     SELECT year, producers
     FROM movies

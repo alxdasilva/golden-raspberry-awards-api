@@ -1,18 +1,21 @@
 import request from "supertest";
 import app from "../../src/app.js";
-import { initializeDatabase, db } from "../../src/config/database.js";
+import { initializeDatabase, setDb } from "../../src/config/database.js";
 import loadCSV from "../../src/utils/csvLoader.js";
 
-beforeAll(async () => {
-  await initializeDatabase();
-  await loadCSV("movielist.csv");
-});
+describe("GET /awards/intervals com CSV original", () => {
+  let db;
 
-afterAll(async () => {
-  await db.close();
-});
+  beforeAll(async () => {
+    db = await initializeDatabase();
+    setDb(db);
+    await loadCSV("movielist.csv");
+  });
 
-describe("GET /awards/intervals", () => {
+  afterAll(async () => {
+    await db.close();
+  });
+
   it("deve retornar os produtores com maior e menor intervalo entre vitórias", async () => {
     const response = await request(app).get("/awards/intervals");
 
@@ -29,5 +32,30 @@ describe("GET /awards/intervals", () => {
         expect(item).toHaveProperty("followingWin");
       }
     }
+  });
+
+  it("retorna os dados corretos do arquivo padrão", async () => {
+    const expected = {
+      min: [
+        {
+          producer: "Joel Silver",
+          interval: 1,
+          previousWin: 1990,
+          followingWin: 1991,
+        },
+      ],
+      max: [
+        {
+          producer: "Matthew Vaughn",
+          interval: 13,
+          previousWin: 2002,
+          followingWin: 2015,
+        },
+      ],
+    };
+
+    const response = await request(app).get("/awards/intervals");
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(expected);
   });
 });
